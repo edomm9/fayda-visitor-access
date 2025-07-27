@@ -16,8 +16,8 @@ We are building a digital check-in system that allows visitors to log their entr
 
 ### Expected Outcome
 A working prototype that:
-- Allows secure check-ins via Fayda ID
-- Stores visit logs
+- Allows secure check-ins and check-outs via Fayda ID
+- Stores visit logs along with a dashboard to view logs along with analytics
 - Optionally notifies the host being visited
 - Supports future extensions like QR codes or analytics
 
@@ -26,10 +26,10 @@ Fayda will serve as the **digital identity layer** to verify visitors and ensure
 
 ---
 
-## 🧰 Tech Stack
+## Tech Stack
 
-- **Frontend:** React.js (or plain HTML + JS)
+- **Frontend:** plain HTML + JS
 - **Backend:** FastAPI (Python) or Node.js
 - **Database:** SQLite (lightweight) or Supabase
 - **Auth/Identity:** VeriFayda OIDC (mock or real)
-- **Deployment:** Render / Vercel / GitHub Pages / Local server
+- **Deployment:** Netlify / Vercel
