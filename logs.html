@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor Logs - Fayda Visitor Access System</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <a href="dashboard.html" class="logo">Fayda Visitor Access</a>
+                    <nav>
+                        <ul class="nav-menu" id="navMenu">
+                            <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                            <li><a href="checkin.html" class="nav-link">Check-In</a></li>
+                            <li><a href="logs.html" class="nav-link active">Visitor Logs</a></li>
+                            <li><a href="settings.html" class="nav-link">Settings</a></li>
+                        </ul>
+                    </nav>
+                    <div class="user-menu">
+                        <span id="currentUser"></span>
+                        <button class="logout-btn" onclick="logout()">Logout</button>
+                    </div>
+                    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="container">
+                <div class="card">
+                    <div class="card-header">
+                        <h1 class="card-title">Visitor Logs</h1>
+                        <p class="card-subtitle">View and search all visitor records</p>
+                    </div>
+
+                    <!-- Search and Filter Controls -->
+                    <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 250px;">
+                            <input 
+                                type="text" 
+                                id="searchInput" 
+                                class="form-input"
+                                placeholder="Search by name, Fayda ID, or host..."
+                                style="margin-bottom: 0;"
+                            >
+                        </div>
+                        <div>
+                            <input 
+                                type="date" 
+                                id="dateFilter" 
+                                class="form-input"
+                                style="margin-bottom: 0;"
+                            >
+                        </div>
+                        <div>
+                            <button class="btn btn-secondary" onclick="clearFilters()">
+                                Clear Filters
+                            </button>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary" onclick="exportLogs()">
+                                📊 Export CSV
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Visitor Logs Table -->
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Fayda ID</th>
+                                    <th>Full Name</th>
+                                    <th>Person to Visit</th>
+                                    <th>Check-in/out Time</th>
+                                    <th>Reason</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logsTableBody">
+                                <tr>
+                                    <td colspan="6" style="text-align: center; color: var(--text-muted);">
+                                        No visitor records found
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div id="pagination" style="display: flex; justify-content: center; align-items: center; gap: 1rem; margin-top: 2rem;">
+                        <button class="btn btn-secondary" id="prevBtn" onclick="changePage(-1)" disabled>
+                            ← Previous
+                        </button>
+                        <span id="pageInfo">Page 1 of 1</span>
+                        <button class="btn btn-secondary" id="nextBtn" onclick="changePage(1)" disabled>
+                            Next →
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { app } from './js/modules/app.js';
+        import { formatDateTime, truncate, debounce, downloadCSV } from './js/modules/utils.js';
+
+        // Check authentication
+        if (!app.requireAuth()) {
+            throw new Error('Authentication required');
+        }
+
+        // Initialize page
+        const currentUser = app.getCurrentUser();
+        document.getElementById('currentUser').textContent = currentUser.username;
+
+        // Pagination state
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let filteredVisitors = [];
+
+        // Get DOM elements
+        const searchInput = document.getElementById('searchInput');
+        const dateFilter = document.getElementById('dateFilter');
+        const logsTableBody = document.getElementById('logsTableBody');
+        const pageInfo = document.getElementById('pageInfo');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        // Filter and display visitors
+        function filterAndDisplayVisitors() {
+            let visitors = app.getVisitors();
+            
+            // Apply search filter
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            if (searchTerm) {
+                visitors = visitors.filter(visitor =>
+                    visitor.fullName.toLowerCase().includes(searchTerm) ||
+                    visitor.faydaId.includes(searchTerm) ||
+                    visitor.personToVisit.toLowerCase().includes(searchTerm) ||
+                    visitor.reasonForVisit.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            // Apply date filter
+            const dateValue = dateFilter.value;
+            if (dateValue) {
+                const targetDate = new Date(dateValue).toDateString();
+                visitors = visitors.filter(visitor => 
+                    new Date(visitor.checkInTime).toDateString() === targetDate
+                );
+            }
+
+            filteredVisitors = visitors;
+            currentPage = 1;
+            displayVisitors();
+        }
+
+        // Display visitors with pagination
+        function displayVisitors() {
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pageVisitors = filteredVisitors.slice(startIndex, endIndex);
+
+            if (pageVisitors.length === 0) {
+                logsTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; color: var(--text-muted);">
+                            ${filteredVisitors.length === 0 ? 'No visitor records found' : 'No visitors on this page'}
+                        </td>
+                    </tr>
+                `;
+            } else {
+                logsTableBody.innerHTML = pageVisitors.map(visitor => `
+                    <tr>
+                        <td>${visitor.faydaId}</td>
+                        <td style="font-weight: 600;">${visitor.fullName}</td>
+                        <td>${visitor.personToVisit}</td>
+                        <td>
+                            <div>${formatDateTime(visitor.checkInTime)}</div>
+                            ${visitor.checkOutTime ? `<div style="font-size: 0.8rem; color: var(--text-muted);">Out: ${formatDateTime(visitor.checkOutTime)}</div>` : ''}
+                        </td>
+                        <td title="${visitor.reasonForVisit}">${truncate(visitor.reasonForVisit, 40)}</td>
+                        <td>
+                            <span style="color: ${visitor.status === 'checked-out' ? 'var(--accent-color)' : 'var(--secondary-color)'}; font-weight: 600;">
+                                ${visitor.status === 'checked-out' ? '✓ Checked Out' : '✓ Checked In'}
+                            </span>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            // Update pagination
+            const totalPages = Math.ceil(filteredVisitors.length / itemsPerPage);
+            pageInfo.textContent = `Page ${currentPage} of ${Math.max(1, totalPages)}`;
+            
+            prevBtn.disabled = currentPage <= 1;
+            nextBtn.disabled = currentPage >= totalPages;
+        }
+
+        // Change page
+        window.changePage = function(direction) {
+            const totalPages = Math.ceil(filteredVisitors.length / itemsPerPage);
+            const newPage = currentPage + direction;
+            
+            if (newPage >= 1 && newPage <= totalPages) {
+                currentPage = newPage;
+                displayVisitors();
+            }
+        };
+
+        // Clear filters
+        window.clearFilters = function() {
+            searchInput.value = '';
+            dateFilter.value = '';
+            filterAndDisplayVisitors();
+        };
+
+        // Export logs
+        window.exportLogs = function() {
+            if (filteredVisitors.length === 0) {
+                alert('No data to export');
+                return;
+            }
+
+            const exportData = filteredVisitors.map(visitor => ({
+                'Fayda ID': visitor.faydaId,
+                'Full Name': visitor.fullName,
+                'Person to Visit': visitor.personToVisit,
+                'Check-in Time': formatDateTime(visitor.checkInTime),
+                'Reason for Visit': visitor.reasonForVisit,
+                'Status': visitor.status
+            }));
+
+            const filename = `visitor-logs-${new Date().toISOString().split('T')[0]}.csv`;
+            downloadCSV(exportData, filename);
+        };
+
+        // Event listeners
+        const debouncedFilter = debounce(filterAndDisplayVisitors, 300);
+        searchInput.addEventListener('input', debouncedFilter);
+        dateFilter.addEventListener('change', filterAndDisplayVisitors);
+
+        // Global functions for navigation
+        window.logout = () => app.logout();
+        window.toggleMobileMenu = () => {
+            document.getElementById('navMenu').classList.toggle('active');
+        };
+
+        // Initialize
+        filterAndDisplayVisitors();
+    </script>
+</body>
+</html>
