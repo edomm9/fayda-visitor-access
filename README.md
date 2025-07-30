@@ -75,17 +75,17 @@ A comprehensive **visitor management system** for **secure facilities**, enhance
 
 ### Key Features
 
-- **🔐 Secure Authentication**: Multi-role user authentication (Admin, Guard, Security)
-- **👤 Visitor Check-In/Out**: Streamlined visitor registration with photo verification
-- **📸 Photo ID Verification**: Automatic photo display for identity confirmation
-- **📊 Real-time Dashboard**: Live statistics and visitor activity monitoring
-- **📋 Comprehensive Logging**: Detailed visitor logs with search and filtering
-- **⚙️ System Management**: Host management, settings, and data export
-- **🌙 Dark/Light Theme**: User-preferred theme switching
-- **📱 Responsive Design**: Mobile-first design for all devices
-- **♿ Accessibility**: WCAG compliant with screen reader support
+- **Secure Authentication**: Multi-role user authentication (Admin, Guard, Security)
+- **Visitor Check-In/Out**: Streamlined visitor registration with photo verification
+- **Photo ID Verification**: Automatic photo display for identity confirmation
+- **Real-time Dashboard**: Live statistics and visitor activity monitoring
+- **Comprehensive Logging**: Detailed visitor logs with search and filtering
+- **System Management**: Host management, settings, and data export
+- **Dark/Light Theme**: User-preferred theme switching
+- **Responsive Design**: Mobile-first design for all devices
+- **Accessibility**: WCAG compliant with screen reader support
 
-## 🚀 Current Implementation
+## Current Implementation
 
 ### Technology Stack
 
@@ -253,65 +253,6 @@ CREATE TABLE hosts (
 - **Client Assertion**: JWT-based client authentication
 - **Rate Limiting**: API rate limiting for security
 - **Data Encryption**: Sensitive data encryption at rest and in transit
-
-### Migration Strategy
-
-#### Phase 1: Backend API Development
-1. Set up Node.js/Express or Python/Django backend
-2. Implement basic CRUD operations
-3. Set up PostgreSQL/MySQL database
-4. Create API documentation
-
-#### Phase 2: VeriFayda Integration
-1. Implement eSignet OIDC flow
-2. Set up client credentials and certificates
-3. Implement JWT signing and verification
-4. Test with VeriFayda 2.0 sandbox environment
-
-#### Phase 3: Frontend Integration
-1. Replace localStorage with API calls
-2. Implement proper error handling
-3. Add loading states and offline support
-4. Enhance security with proper token management
-
-#### Phase 4: Production Deployment
-1. Set up production environment
-2. Implement monitoring and logging
-3. Security audit and penetration testing
-4. User acceptance testing
-
-## 🛠️ Development Setup
-
-### Prerequisites
-- Modern web browser (Chrome, Firefox, Safari, Edge)
-- Local web server (optional, for development)
-- Text editor or IDE
-
-### Installation
-1. Clone the repository:
-\`\`\`bash
-git clone https://github.com/your-org/fayda-visitor-access.git
-cd fayda-visitor-access
-\`\`\`
-
-2. Serve the files using a local web server:
-\`\`\`bash
-# Using Python
-python -m http.server 8000
-
-# Using Node.js
-npx serve .
-
-# Using PHP
-php -S localhost:8000
-\`\`\`
-
-3. Open your browser and navigate to `http://localhost:8000`
-
-### Demo Credentials
-- **Admin**: `admin / admin123`
-- **Guard**: `guard / guard123`
-- **Security**: `security / security123`
 
 ## Usage
 
