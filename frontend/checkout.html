@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor Check-Out - Fayda Visitor Access System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar" role="navigation" aria-label="Main navigation">
+            <div class="nav-content">
+                <a href="index.html" class="nav-brand">
+                    <img src="assets/image.png" alt="Fayda Logo" class="nav-logo">
+                    <span>Fayda Visitor Access</span>
+                </a>
+                <div class="nav-links">
+                    <a href="checkin.html" class="nav-link">Check-In</a>
+                    <a href="checkout.html" class="nav-link active" aria-current="page">Check-Out</a>
+                    <a href="dashboard.html" class="nav-link">Dashboard</a>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1>Visitor Check-Out</h1>
+                <p>Enter Fayda ID to complete visitor check-out</p>
+            </div>
+
+            <div class="checkout-container">
+                <!-- Fayda ID Input -->
+                <div class="card" id="checkout-input-card">
+                    <div class="card-header">
+                        <h2>Enter Visitor Information</h2>
+                    </div>
+                    <div class="card-body">
+                        <form id="checkout-form" novalidate>
+                            <div class="form-group">
+                                <label for="checkout-fayda-id" class="form-label">
+                                    Fayda ID (12 digits) <span class="required">*</span>
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="checkout-fayda-id" 
+                                    name="faydaId"
+                                    class="form-input" 
+                                    placeholder="Enter 12-digit Fayda ID"
+                                    pattern="[0-9]{12}"
+                                    maxlength="12"
+                                    required
+                                    aria-describedby="checkout-fayda-help"
+                                >
+                                <div id="checkout-fayda-help" class="form-help">
+                                    Enter the same Fayda ID used during check-in
+                                </div>
+                                <div class="form-error" id="checkout-fayda-error" role="alert"></div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    Find Active Visit
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Visit Confirmation -->
+                <div class="card hidden" id="visit-confirmation-card">
+                    <div class="card-header">
+                        <h2>Confirm Check-Out</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="visit-summary">
+                            <div class="visitor-info-checkout">
+                                <img id="checkout-visitor-photo" src="/placeholder.svg" alt="Visitor Photo" class="photo-display-small">
+                                <div class="visitor-details-checkout">
+                                    <h3 id="checkout-visitor-name">Loading...</h3>
+                                    <p id="checkout-visitor-id" class="visitor-meta"></p>
+                                </div>
+                            </div>
+                            
+                            <div class="visit-info">
+                                <div class="info-row">
+                                    <span class="info-label">Visiting:</span>
+                                    <span id="checkout-host" class="info-value">-</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Check-in Time:</span>
+                                    <span id="checkout-checkin-time" class="info-value">-</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Reason:</span>
+                                    <span id="checkout-reason" class="info-value">-</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="checkout-actions">
+                            <button type="button" id="confirm-checkout" class="btn btn-success">
+                                ✓ Confirm Check-Out
+                            </button>
+                            <button type="button" id="cancel-checkout" class="btn btn-outline">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Success Message -->
+                <div class="card hidden" id="checkout-success-card">
+                    <div class="card-body text-center">
+                        <div class="success-icon">✅</div>
+                        <h2>Check-Out Successful!</h2>
+                        <p id="checkout-success-message">Visitor has been successfully checked out.</p>
+                        <div class="visit-duration">
+                            <span class="duration-label">Visit Duration:</span>
+                            <span id="visit-duration" class="duration-value">-</span>
+                        </div>
+                        <button type="button" id="new-checkout" class="btn btn-primary">
+                            New Check-Out
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Overlay -->
+            <div class="loading-overlay hidden" id="loading-overlay">
+                <div class="loading-spinner"></div>
+                <p>Processing...</p>
+            </div>
+
+            <!-- Error Messages -->
+            <div class="alert alert-error hidden" id="error-alert" role="alert">
+                <span class="alert-icon">⚠️</span>
+                <span id="error-message">An error occurred</span>
+                <button type="button" class="alert-close" aria-label="Close">&times;</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/checkout.js"></script>
+</body>
+</html>

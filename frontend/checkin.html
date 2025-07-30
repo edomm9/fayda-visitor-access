@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor Check-In - Fayda Visitor Access System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar" role="navigation" aria-label="Main navigation">
+            <div class="nav-content">
+                <a href="index.html" class="nav-brand">
+                    <img src="assets/image.png" alt="Fayda Logo" class="nav-logo">
+                    <span>Fayda Visitor Access</span>
+                </a>
+                <div class="nav-links">
+                    <a href="checkin.html" class="nav-link active" aria-current="page">Check-In</a>
+                    <a href="checkout.html" class="nav-link">Check-Out</a>
+                    <a href="dashboard.html" class="nav-link">Dashboard</a>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1>Visitor Check-In</h1>
+                <p>Enter Fayda ID or scan QR code to register visitor</p>
+            </div>
+
+            <div class="checkin-container">
+                <!-- Step 1: Fayda ID Input -->
+                <div class="card" id="fayda-input-card">
+                    <div class="card-header">
+                        <h2>Step 1: Enter Visitor Information</h2>
+                    </div>
+                    <div class="card-body">
+                        <form id="fayda-form" novalidate>
+                            <div class="form-group">
+                                <label for="fayda-id" class="form-label">
+                                    Fayda ID (12 digits) <span class="required">*</span>
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="fayda-id" 
+                                    name="faydaId"
+                                    class="form-input" 
+                                    placeholder="Enter 12-digit Fayda ID"
+                                    pattern="[0-9]{12}"
+                                    maxlength="12"
+                                    required
+                                    aria-describedby="fayda-id-help"
+                                >
+                                <div id="fayda-id-help" class="form-help">
+                                    Enter the 12-digit Fayda identification number
+                                </div>
+                                <div class="form-error" id="fayda-id-error" role="alert"></div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" id="qr-scan-btn" class="btn btn-outline">
+                                    <span class="btn-icon">📷</span>
+                                    Scan QR Code
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    Verify Identity
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Step 2: Visitor Verification -->
+                <div class="card hidden" id="visitor-verification-card">
+                    <div class="card-header">
+                        <h2>Step 2: Verify Visitor Identity</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="visitor-info">
+                            <div class="visitor-photo">
+                                <img id="visitor-photo" src="/placeholder.svg" alt="Visitor Photo" class="photo-display">
+                            </div>
+                            <div class="visitor-details">
+                                <h3 id="visitor-name">Loading...</h3>
+                                <p id="visitor-id" class="visitor-meta"></p>
+                                <p id="visitor-details-extra" class="visitor-meta"></p>
+                            </div>
+                        </div>
+                        
+                        <div class="verification-actions">
+                            <button type="button" id="verify-confirm" class="btn btn-success">
+                                ✓ Confirm Identity
+                            </button>
+                            <button type="button" id="verify-reject" class="btn btn-danger">
+                                ✗ Identity Mismatch
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Visit Details -->
+                <div class="card hidden" id="visit-details-card">
+                    <div class="card-header">
+                        <h2>Step 3: Visit Information</h2>
+                    </div>
+                    <div class="card-body">
+                        <form id="visit-form" novalidate>
+                            <div class="form-group">
+                                <label for="host-select" class="form-label">
+                                    Person to Visit <span class="required">*</span>
+                                </label>
+                                <select id="host-select" name="hostId" class="form-select" required>
+                                    <option value="">Select person to visit...</option>
+                                </select>
+                                <div class="form-error" id="host-error" role="alert"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="visit-reason" class="form-label">
+                                    Reason for Visit <span class="required">*</span>
+                                </label>
+                                <textarea 
+                                    id="visit-reason" 
+                                    name="reason"
+                                    class="form-textarea" 
+                                    placeholder="Enter reason for visit"
+                                    rows="3"
+                                    required
+                                    aria-describedby="reason-help"
+                                ></textarea>
+                                <div id="reason-help" class="form-help">
+                                    Provide a brief description of the visit purpose
+                                </div>
+                                <div class="form-error" id="reason-error" role="alert"></div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" id="back-to-verify" class="btn btn-outline">
+                                    ← Back
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    Complete Check-In
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Success Message -->
+                <div class="card hidden" id="success-card">
+                    <div class="card-body text-center">
+                        <div class="success-icon">✅</div>
+                        <h2>Check-In Successful!</h2>
+                        <p id="success-message">Visitor has been successfully checked in.</p>
+                        <button type="button" id="new-checkin" class="btn btn-primary">
+                            New Check-In
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Overlay -->
+            <div class="loading-overlay hidden" id="loading-overlay">
+                <div class="loading-spinner"></div>
+                <p>Processing...</p>
+            </div>
+
+            <!-- Error Messages -->
+            <div class="alert alert-error hidden" id="error-alert" role="alert">
+                <span class="alert-icon">⚠️</span>
+                <span id="error-message">An error occurred</span>
+                <button type="button" class="alert-close" aria-label="Close">&times;</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/checkin.js"></script>
+</body>
+</html>

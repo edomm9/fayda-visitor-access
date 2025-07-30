@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Fayda Visitor Access System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar" role="navigation" aria-label="Main navigation">
+            <div class="nav-content">
+                <a href="index.html" class="nav-brand">
+                    <img src="assets/image.png" alt="Fayda Logo" class="nav-logo">
+                    <span>Fayda Visitor Access</span>
+                </a>
+                <div class="nav-links">
+                    <a href="checkin.html" class="nav-link">Check-In</a>
+                    <a href="checkout.html" class="nav-link">Check-Out</a>
+                    <a href="dashboard.html" class="nav-link active" aria-current="page">Dashboard</a>
+                    <a href="hosts.html" class="nav-link">Manage Hosts</a>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1>Admin Dashboard</h1>
+                <p>Monitor visitor activity and system statistics</p>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-content">
+                        <h3 id="total-visitors">0</h3>
+                        <p>Total Visitors Today</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🏢</div>
+                    <div class="stat-content">
+                        <h3 id="active-visits">0</h3>
+                        <p>Currently Inside</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⏱️</div>
+                    <div class="stat-content">
+                        <h3 id="avg-duration">0m</h3>
+                        <p>Average Visit Duration</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-content">
+                        <h3 id="peak-hour">-</h3>
+                        <p>Peak Hour</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters and Search -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Visitor Logs</h2>
+                </div>
+                <div class="card-body">
+                    <div class="filters-section">
+                        <div class="filter-group">
+                            <label for="date-filter" class="form-label">Date Range</label>
+                            <select id="date-filter" class="form-select">
+                                <option value="today">Today</option>
+                                <option value="yesterday">Yesterday</option>
+                                <option value="week">This Week</option>
+                                <option value="month">This Month</option>
+                                <option value="custom">Custom Range</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label for="status-filter" class="form-label">Status</label>
+                            <select id="status-filter" class="form-select">
+                                <option value="all">All Visits</option>
+                                <option value="active">Currently Inside</option>
+                                <option value="completed">Checked Out</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label for="host-filter" class="form-label">Host</label>
+                            <select id="host-filter" class="form-select">
+                                <option value="all">All Hosts</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label for="search-input" class="form-label">Search</label>
+                            <input 
+                                type="text" 
+                                id="search-input" 
+                                class="form-input" 
+                                placeholder="Search by name or Fayda ID"
+                            >
+                        </div>
+                        
+                        <div class="filter-actions">
+                            <button type="button" id="apply-filters" class="btn btn-primary">
+                                Apply Filters
+                            </button>
+                            <button type="button" id="reset-filters" class="btn btn-outline">
+                                Reset
+                            </button>
+                            <button type="button" id="export-data" class="btn btn-secondary">
+                                📥 Export CSV
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visitor Logs Table -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="data-table" id="visitor-logs-table">
+                            <thead>
+                                <tr>
+                                    <th>Photo</th>
+                                    <th>Visitor Name</th>
+                                    <th>Fayda ID</th>
+                                    <th>Host</th>
+                                    <th>Check-In</th>
+                                    <th>Check-Out</th>
+                                    <th>Duration</th>
+                                    <th>Reason</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logs-tbody">
+                                <tr>
+                                    <td colspan="10" class="text-center">
+                                        <div class="loading-spinner"></div>
+                                        Loading visitor logs...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="pagination-container">
+                        <div class="pagination-info">
+                            Showing <span id="showing-start">0</span> to <span id="showing-end">0</span> 
+                            of <span id="total-records">0</span> records
+                        </div>
+                        <div class="pagination-controls">
+                            <button type="button" id="prev-page" class="btn btn-outline btn-sm" disabled>
+                                ← Previous
+                            </button>
+                            <span id="page-info">Page 1 of 1</span>
+                            <button type="button" id="next-page" class="btn btn-outline btn-sm" disabled>
+                                Next →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Overlay -->
+            <div class="loading-overlay hidden" id="loading-overlay">
+                <div class="loading-spinner"></div>
+                <p>Loading dashboard data...</p>
+            </div>
+
+            <!-- Error Messages -->
+            <div class="alert alert-error hidden" id="error-alert" role="alert">
+                <span class="alert-icon">⚠️</span>
+                <span id="error-message">An error occurred</span>
+                <button type="button" class="alert-close" aria-label="Close">&times;</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
