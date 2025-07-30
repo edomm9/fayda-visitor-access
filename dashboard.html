@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Fayda Visitor Access System</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <a href="dashboard.html" class="logo">Fayda Visitor Access</a>
+                    <nav>
+                        <ul class="nav-menu" id="navMenu">
+                            <li><a href="dashboard.html" class="nav-link active">Dashboard</a></li>
+                            <li><a href="checkin.html" class="nav-link">Check-In</a></li>
+                            <li><a href="logs.html" class="nav-link">Visitor Logs</a></li>
+                            <li><a href="settings.html" class="nav-link">Settings</a></li>
+                        </ul>
+                    </nav>
+                    <div class="user-menu">
+                        <span id="currentUser"></span>
+                        <button class="logout-btn" onclick="logout()">Logout</button>
+                    </div>
+                    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="container">
+                <div class="card">
+                    <div class="card-header">
+                        <h1 class="card-title">Dashboard Overview</h1>
+                        <p class="card-subtitle">Welcome to the Fayda Visitor Access System</p>
+                    </div>
+
+                    <!-- Statistics Grid -->
+                    <div class="grid grid-4" style="margin-bottom: 2rem;">
+                        <div class="card stat-card">
+                            <span class="stat-number" id="todayCount">0</span>
+                            <div class="stat-label">Today's Visitors</div>
+                        </div>
+                        <div class="card stat-card">
+                            <span class="stat-number" id="totalCount">0</span>
+                            <div class="stat-label">Total Visitors</div>
+                        </div>
+                        <div class="card stat-card">
+                            <span class="stat-number" id="activeCount">0</span>
+                            <div class="stat-label">Currently Checked In</div>
+                        </div>
+                        <div class="card stat-card">
+                            <span class="stat-number" id="hostCount">5</span>
+                            <div class="stat-label">Available Hosts</div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Visitors -->
+                    <div class="grid grid-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Recent Visitors</h2>
+                                <p class="card-subtitle">Latest check-ins</p>
+                            </div>
+                            <div class="table-container">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Time</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentVisitorsTable">
+                                        <tr>
+                                            <td colspan="3" style="text-align: center; color: var(--text-muted);">
+                                                No visitors yet today
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Quick Actions</h2>
+                                <p class="card-subtitle">Common tasks</p>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                                <a href="checkin.html" class="btn btn-primary">
+                                    ➕ New Check-In
+                                </a>
+                                <a href="logs.html" class="btn btn-secondary">
+                                    📋 View All Logs
+                                </a>
+                                <a href="settings.html" class="btn btn-secondary">
+                                    ⚙️ System Settings
+                                </a>
+                                <button class="btn btn-secondary" onclick="exportData()">
+                                    📊 Export Data
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Most Visited Host -->
+                    <div class="card" style="margin-top: 2rem;">
+                        <div class="card-header">
+                            <h2 class="card-title">Popular Destinations</h2>
+                            <p class="card-subtitle">Most visited hosts this month</p>
+                        </div>
+                        <div id="popularHosts">
+                            <p style="color: var(--text-muted); text-align: center;">
+                                No data available yet
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { app } from './js/modules/app.js';
+        import { formatTime, downloadCSV } from './js/modules/utils.js';
+
+        // Check authentication
+        if (!app.requireAuth()) {
+            throw new Error('Authentication required');
+        }
+
+        // Initialize page
+        const currentUser = app.getCurrentUser();
+        document.getElementById('currentUser').textContent = currentUser.username;
+
+        // Update dashboard statistics
+        function updateDashboard() {
+            const stats = app.getVisitorStats();
+            
+            document.getElementById('todayCount').textContent = stats.totalToday;
+            document.getElementById('totalCount').textContent = stats.totalAllTime;
+            document.getElementById('activeCount').textContent = stats.totalToday; // Simplified for demo
+            
+            // Update recent visitors table
+            const tableBody = document.getElementById('recentVisitorsTable');
+            if (stats.recentVisitors.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="3" style="text-align: center; color: var(--text-muted);">
+                            No visitors yet today
+                        </td>
+                    </tr>
+                `;
+            } else {
+                tableBody.innerHTML = stats.recentVisitors.map(visitor => `
+                    <tr>
+                        <td>${visitor.fullName}</td>
+                        <td>${formatTime(visitor.checkInTime)}</td>
+                        <td>
+                            <span style="color: ${visitor.status === 'checked-out' ? 'var(--accent-color)' : 'var(--secondary-color)'}; font-weight: 600;">
+                                ${visitor.status === 'checked-out' ? '✓ Checked Out' : '✓ Checked In'}
+                            </span>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            // Update popular hosts
+            const visitors = app.getVisitors();
+            const hostCounts = {};
+            visitors.forEach(visitor => {
+                hostCounts[visitor.personToVisit] = (hostCounts[visitor.personToVisit] || 0) + 1;
+            });
+
+            const sortedHosts = Object.entries(hostCounts)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 5);
+
+            const popularHostsDiv = document.getElementById('popularHosts');
+            if (sortedHosts.length === 0) {
+                popularHostsDiv.innerHTML = `
+                    <p style="color: var(--text-muted); text-align: center;">
+                        No data available yet
+                    </p>
+                `;
+            } else {
+                popularHostsDiv.innerHTML = `
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        ${sortedHosts.map(([host, count], index) => `
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--background-color); border-radius: var(--border-radius);">
+                                <div>
+                                    <span style="font-weight: 600; color: var(--text-primary);">
+                                        ${index + 1}. ${host}
+                                    </span>
+                                </div>
+                                <div style="background: var(--primary-color); color: white; padding: 0.25rem 0.75rem; border-radius: var(--border-radius); font-size: 0.875rem; font-weight: 600;">
+                                    ${count} visits
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+        }
+
+        // Export data function
+        window.exportData = function() {
+            const visitors = app.getVisitors();
+            if (visitors.length === 0) {
+                alert('No data to export');
+                return;
+            }
+
+            const exportData = visitors.map(visitor => ({
+                'Fayda ID': visitor.faydaId,
+                'Full Name': visitor.fullName,
+                'Person to Visit': visitor.personToVisit,
+                'Reason for Visit': visitor.reasonForVisit,
+                'Check-in Time': new Date(visitor.checkInTime).toLocaleString(),
+                'Status': visitor.status
+            }));
+
+            const filename = `visitor-logs-${new Date().toISOString().split('T')[0]}.csv`;
+            downloadCSV(exportData, filename);
+        };
+
+        // Global functions for navigation
+        window.logout = () => app.logout();
+        window.toggleMobileMenu = () => {
+            document.getElementById('navMenu').classList.toggle('active');
+        };
+
+        // Initialize dashboard
+        updateDashboard();
+
+        // Auto-refresh dashboard every 30 seconds
+        setInterval(updateDashboard, 30000);
+    </script>
+</body>
+</html>

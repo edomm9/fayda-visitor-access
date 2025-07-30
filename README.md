@@ -1,174 +1,370 @@
 # Fayda Visitor Access System
 
-## Contributors:
-- Edom Mulugeta
-- Gelila Nebiyu
-- Selome Gebregiorgis
+The prototype is **hosted at**:  
+🔗 [https://v0-fayda-visitor-access.vercel.app/](https://v0-fayda-visitor-access.vercel.app/)
+
+
+A comprehensive visitor management system built with vanilla HTML, CSS, and JavaScript, designed for institutional use with plans for VeriFayda 2.0 (eSignet) integration for secure identity verification.
+
+## 🏢 Overview
+
+The Fayda Visitor Access System is a modern, accessible web application that streamlines visitor management for institutions. It provides a complete solution for visitor check-in/check-out, identity verification, and administrative oversight.
+
+# Fayda Visitor Access System
+
+## Contributors
+- Edom Mulugeta  
+- Gelila Nebiyu  
+- Selome Gebregiorgis  
 
 ---
+
 ## Project Synopsis
 
 ### Problem Statement
-Government offices and institutions often use manual logbooks to record visitors. This approach is inefficient, insecure, and prone to errors and impersonation.
+Government offices and institutions often rely on **manual logbooks** to record visitors. This approach is:
+
+- Inefficient  
+- Insecure  
+- Prone to errors and impersonation  
+
+---
 
 ### Planned Solution
-We are building a digital check-in system that allows visitors to log their entry using their Fayda ID. The system will verify the identity via Fayda and log the visit (name, timestamp, person being visited, and reason).
+We are building a **digital check-in system** that allows visitors to log their entry using their **Fayda ID**.  
+The system will:
+
+- Verify identity via Fayda  
+- Log the visit details:
+  - Name  
+  - Timestamp  
+  - Person being visited  
+  - Reason for visit  
+
+---
 
 ### Expected Outcome
 A working prototype that:
-- Allows secure check-ins and check-outs via Fayda ID
-- Stores visit logs along with a dashboard to view logs along with analytics
-- Optionally notifies the host being visited
-- Supports future extensions like QR codes or analytics
+
+- Allows **secure check-ins and check-outs** via Fayda ID  
+- **Stores visit logs** and provides a **dashboard** with:
+  - Viewable logs  
+  - Basic analytics  
+- Optionally **notifies the host** being visited  
+- Supports future extensions such as:
+  - **QR codes**  
+  - Advanced **analytics**  
+
+---
 
 ### Fayda’s Role
-Fayda will serve as the **digital identity layer** to verify visitors and ensure entries are tied to a real, authenticated person. This adds a layer of trust and accountability to visitor access.
+Fayda will serve as the **digital identity layer**, verifying visitors and ensuring that entries are:
+
+- Tied to a **real, authenticated person**  
+- Secured and trustworthy  
+- Logged for **accountability**  
+
+> **Technology Integration**:  
+> This system will utilize **Fayda ID authentication** and **VeriFayda 2.0 (eSignet)** via **OIDC integration** to power secure and seamless visitor access.
 
 ---
-A comprehensive visitor management system for secure facilities using **Fayda ID authentication** and **VeriFayda 2.0 (eSignet) OIDC integration**.
 
-## Architecture
+## Summary
+A comprehensive **visitor management system** for **secure facilities**, enhanced by **Fayda ID authentication** and **VeriFayda 2.0**, promoting trust, security, and operational efficiency.
 
-- **Frontend**: Vanilla HTML, CSS, JavaScript 
-- **Backend**: Django REST API 
-- **Authentication**: VeriFayda 2.0 (eSignet) OIDC with PKCE flow
-- **Database**: SQLite (development) / PostgreSQL (production)
 
-## Features
+### Key Features
 
-### Core Functionality
-- **Visitor Check-In**: Fayda ID authentication with VeriFayda 2.0 OIDC
-- **Visitor Check-Out**: Quick checkout process with visit duration tracking
-- **Admin Dashboard**: Real-time statistics, visitor logs, and reporting
-- **Host Management**: Add/edit people who can receive visitors
+- **🔐 Secure Authentication**: Multi-role user authentication (Admin, Guard, Security)
+- **👤 Visitor Check-In/Out**: Streamlined visitor registration with photo verification
+- **📸 Photo ID Verification**: Automatic photo display for identity confirmation
+- **📊 Real-time Dashboard**: Live statistics and visitor activity monitoring
+- **📋 Comprehensive Logging**: Detailed visitor logs with search and filtering
+- **⚙️ System Management**: Host management, settings, and data export
+- **🌙 Dark/Light Theme**: User-preferred theme switching
+- **📱 Responsive Design**: Mobile-first design for all devices
+- **♿ Accessibility**: WCAG compliant with screen reader support
 
-### Security Features
-- OIDC Authorization Code Flow with PKCE
-- JWT client assertion with RS256 signing using JWK private key
-- Secure session management with expiration
-- CORS protection and CSRF mitigation
+## 🚀 Current Implementation
 
-### User Experience
-- Responsive design for tablet/kiosk displays
-- Accessible HTML5 with ARIA support
-- Professional government-style UI
-- Real-time form validation
-- Multi-language support (English/Amharic)
+### Technology Stack
 
-## Installation and Deployment
+- **Frontend**: Vanilla HTML5, CSS3, JavaScript (ES6+)
+- **Storage**: Browser localStorage (temporary solution)
+- **Architecture**: Modular JavaScript with separation of concerns
+- **Styling**: CSS Custom Properties with theme support
+- **Icons**: Unicode emojis and CSS-based icons
+
+### Current Features
+
+#### 1. Authentication System
+- **Multi-role Support**: Admin, Guard, Security roles
+- **Session Management**: Persistent login with localStorage
+- **Demo Credentials**: 
+  - `admin / admin123`
+  - `guard / guard123`
+  - `security / security123`
+
+#### 2. Visitor Management
+- **Dual Interface**: Tabbed check-in/check-out on single page
+- **Photo Verification**: Automatic photo display for valid Fayda IDs
+- **Real-time Validation**: Instant feedback for form inputs
+- **Status Tracking**: Complete visitor lifecycle management
+
+#### 3. Administrative Features
+- **Live Dashboard**: Real-time visitor statistics and activity
+- **Comprehensive Logs**: Searchable visitor history with pagination
+- **Host Management**: Dynamic host list management
+- **Data Export**: CSV export functionality
+- **System Settings**: Theme, notifications, and preferences
+
+#### 4. User Experience
+- **Modern UI**: Clean, professional institutional design
+- **Responsive Layout**: Optimized for desktop, tablet, and mobile
+- **Accessibility**: ARIA labels, keyboard navigation, screen reader support
+- **Theme Support**: Light/dark mode with system preference detection
+
+## Backend Integration: VeriFayda 2.0 (eSignet)
+
+### Integration Overview
+
+The system is designed for seamless integration with **VeriFayda 2.0** using **eSignet** (OpenID Connect) for secure identity verification and authentication.
+
+### Planned Integration Features
+
+#### 1. Identity Verification
+- **Real-time ID Verification**: Direct integration with Fayda ID database
+- **Biometric Authentication**: Support for OTP and biometric verification
+- **Photo Retrieval**: Automatic photo fetching from official Fayda records
+- **Multi-language Support**: Amharic and English language support
+
+#### 2. Authentication Flow
+\`\`\`
+User Input Fayda ID → VeriFayda 2.0 Verification → Photo & Data Retrieval → Check-in Process
+\`\`\`
+
+#### 3. eSignet OIDC Integration Points
+
+##### Authorization Request
+\`\`\`javascript
+// Planned implementation
+const authUrl = `${ESIGNET_AUTH_ENDPOINT}/authorize?` +
+  `client_id=${CLIENT_ID}&` +
+  `response_type=code&` +
+  `redirect_uri=${CALLBACK_URL}&` +
+  `scope=openid profile email&` +
+  `state=${generateState()}&` +
+  `code_challenge=${codeChallenge}&` +
+  `acr_values=mosip:idp:acr:generated-code&` +
+  `claims_locales=en am&` +
+  `claims=${encodeURIComponent(JSON.stringify(claims))}`;
+\`\`\`
+
+##### User Data Claims
+\`\`\`javascript
+const claims = {
+  "userinfo": {
+    "name": {"essential": true},
+    "phone_number": {"essential": true},
+    "email": {"essential": true},
+    "picture": {"essential": true},
+    "gender": {"essential": true},
+    "birthdate": {"essential": true},
+    "address": {"essential": true}
+  },
+  "id_token": {}
+};
+\`\`\`
+
+##### Token Exchange
+\`\`\`javascript
+// Planned token exchange implementation
+const tokenResponse = await fetch(`${ESIGNET_TOKEN_ENDPOINT}/token`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  },
+  body: new URLSearchParams({
+    grant_type: 'authorization_code',
+    code: authorizationCode,
+    redirect_uri: CALLBACK_URL,
+    client_id: CLIENT_ID,
+    client_assertion: signedJWT,
+    client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+    code_verifier: codeVerifier
+  })
+});
+\`\`\`
+
+### Backend Architecture Plan
+
+#### 1. API Endpoints
+\`\`\`
+POST /api/auth/login          # User authentication
+POST /api/visitors/checkin    # Visitor check-in with VeriFayda verification
+POST /api/visitors/checkout   # Visitor check-out
+GET  /api/visitors           # Retrieve visitor logs
+GET  /api/visitors/stats     # Dashboard statistics
+POST /api/verifayda/verify   # VeriFayda ID verification
+GET  /api/verifayda/photo    # Retrieve user photo
+\`\`\`
+
+#### 2. Database Schema (Planned)
+\`\`\`sql
+-- Users table
+CREATE TABLE users (
+  id UUID PRIMARY KEY,
+  username VARCHAR(50) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  role VARCHAR(20) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Visitors table
+CREATE TABLE visitors (
+  id UUID PRIMARY KEY,
+  fayda_id VARCHAR(12) NOT NULL,
+  full_name VARCHAR(255) NOT NULL,
+  phone_number VARCHAR(20),
+  email VARCHAR(255),
+  photo_url VARCHAR(500),
+  person_to_visit VARCHAR(255) NOT NULL,
+  reason_for_visit TEXT NOT NULL,
+  check_in_time TIMESTAMP NOT NULL,
+  check_out_time TIMESTAMP,
+  status VARCHAR(20) DEFAULT 'checked-in',
+  created_by UUID REFERENCES users(id),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Hosts table
+CREATE TABLE hosts (
+  id UUID PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  department VARCHAR(255),
+  active BOOLEAN DEFAULT true,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+\`\`\`
+
+#### 3. Security Considerations
+- **JWT Token Management**: Secure token storage and refresh
+- **PKCE Implementation**: Code challenge/verifier for OAuth security
+- **Client Assertion**: JWT-based client authentication
+- **Rate Limiting**: API rate limiting for security
+- **Data Encryption**: Sensitive data encryption at rest and in transit
+
+### Migration Strategy
+
+#### Phase 1: Backend API Development
+1. Set up Node.js/Express or Python/Django backend
+2. Implement basic CRUD operations
+3. Set up PostgreSQL/MySQL database
+4. Create API documentation
+
+#### Phase 2: VeriFayda Integration
+1. Implement eSignet OIDC flow
+2. Set up client credentials and certificates
+3. Implement JWT signing and verification
+4. Test with VeriFayda 2.0 sandbox environment
+
+#### Phase 3: Frontend Integration
+1. Replace localStorage with API calls
+2. Implement proper error handling
+3. Add loading states and offline support
+4. Enhance security with proper token management
+
+#### Phase 4: Production Deployment
+1. Set up production environment
+2. Implement monitoring and logging
+3. Security audit and penetration testing
+4. User acceptance testing
+
+## 🛠️ Development Setup
 
 ### Prerequisites
-- Python 3.11+
-- Docker and Docker Compose
-- VeriFayda 2.0 (eSignet) OIDC credentials
-- Git
+- Modern web browser (Chrome, Firefox, Safari, Edge)
+- Local web server (optional, for development)
+- Text editor or IDE
 
-### Backend Setup (Local Development)
+### Installation
+1. Clone the repository:
+\`\`\`bash
+git clone https://github.com/your-org/fayda-visitor-access.git
+cd fayda-visitor-access
+\`\`\`
 
-1. **Clone the repository**:
-   \`\`\`bash
-   git clone <your-repo-url>
-   cd fayda-visitor-system/backend
-   \`\`\`
+2. Serve the files using a local web server:
+\`\`\`bash
+# Using Python
+python -m http.server 8000
 
-2. **Create virtual environment**:
-   \`\`\`bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   \`\`\`
+# Using Node.js
+npx serve .
 
-3. **Install dependencies**:
-   \`\`\`bash
-   pip install -r requirements.txt
-   \`\`\`
+# Using PHP
+php -S localhost:8000
+\`\`\`
 
-4. **Environment configuration**:
-   \`\`\`bash
-   cp .env.example .env
-   \`\`\`
+3. Open your browser and navigate to `http://localhost:8000`
 
-5. **Database setup**:
-   \`\`\`bash
-   python manage.py makemigrations
-   python manage.py migrate
-   python manage.py createsuperuser
-   \`\`\`
+### Demo Credentials
+- **Admin**: `admin / admin123`
+- **Guard**: `guard / guard123`
+- **Security**: `security / security123`
 
-6. **Run development server**:
-   \`\`\`bash
-   python manage.py runserver
-   \`\`\`
+## Usage
 
-   The API will be available at `http://localhost:8000/api/`
+### For Visitors
+1. **Check-In**: Enter your 12-digit Fayda ID
+2. **Verify Identity**: Confirm your photo and details
+3. **Complete Form**: Select host and provide visit reason
+4. **Check-Out**: Use the same interface to check out
 
-### Frontend Setup (Local Development)
+### For Staff
+1. **Login**: Use provided credentials
+2. **Monitor**: View real-time dashboard
+3. **Manage**: Search and filter visitor logs
+4. **Configure**: Adjust settings and manage hosts
 
-1. **Navigate to frontend directory**:
-   \`\`\`bash
-   cd frontend
-   \`\`\`
+## 🔧 Configuration
 
-2. **Update API endpoints** (if needed):
-   - Edit JavaScript files to point to your backend URL
-   - For local development, the default `http://localhost:8000/api` should work
+### Theme Customization
+Modify CSS custom properties in `styles/main.css`:
+\`\`\`css
+:root {
+  --primary-color: #2c5aa0;
+  --secondary-color: #27ae60;
+  --accent-color: #e74c3c;
+  /* ... other variables */
+}
+\`\`\`
 
-3. **Serve locally using Python**:
-   \`\`\`bash
-   python -m http.server 8080
-   \`\`\`
+### Adding New Hosts
+Use the Settings page or modify the default hosts in `js/modules/app.js`:
+\`\`\`javascript
+const defaultHosts = [
+  "Dr. Ahmed Hassan - Medical Director",
+  "Ms. Fatima Al-Zahra - HR Manager",
+  // Add new hosts here
+];
+\`\`\`
 
-   The frontend will be available at `http://localhost:3000`
+## System Requirements
 
+### Minimum Requirements
+- **Browser**: Chrome 70+, Firefox 65+, Safari 12+, Edge 79+
+- **JavaScript**: ES6+ support required
+- **Storage**: 5MB local storage space
+- **Network**: Internet connection for future VeriFayda integration
 
-### Test Credentials
-
-For testing with VeriFayda staging environment:
-
-- **Test FAN**: 3126894653473958
-- **Test FIN**: 6140798523917519  
-- **Test FIN3**: 6230247319356120
-- **OTP**: 111111
-
-## API Endpoints
-
-### Authentication
-- `POST /api/auth/login/` - Basic login (stub)
-- `POST /api/oidc/initiate/` - Initiate VeriFayda OIDC flow
-- `POST /api/oidc/callback/` - Handle VeriFayda OIDC callback
-
-### Visitor Management
-- `POST /api/checkin/` - Check in visitor
-- `POST /api/checkout/find-active/` - Find active visit
-- `POST /api/checkout/` - Check out visitor
-- `POST /api/checkout/force/` - Force checkout (admin)
-
-### Host Management
-- `GET /api/hosts/` - List hosts
-- `POST /api/hosts/` - Create host
-- `GET /api/hosts/{id}/` - Get host details
-- `PUT /api/hosts/{id}/` - Update host
-- `DELETE /api/hosts/{id}/` - Delete host
-
-### Dashboard & Reporting
-- `GET /api/dashboard/stats/` - Get dashboard statistics
-- `GET /api/visitor-logs/` - List visitor logs (with filtering)
-- `GET /api/visitor-logs/export/` - Export logs as CSV
-
-### Logs and Monitoring
-
-- **Backend logs**: Check Django logs in container or `/app/visitor_system.log`
-- **Frontend errors**: Use browser developer console
-- **API monitoring**: Use Django admin interface
-- **VeriFayda integration**: Check network tab for OIDC requests
-
-## Contributing
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open Pull Request
+### Recommended Requirements
+- **Browser**: Latest version of modern browsers
+- **Device**: Desktop, tablet, or mobile device
+- **Screen**: Minimum 320px width
+- **Network**: Stable internet connection
 
 ---
 
-**Built with ❤️ for secure visitor management using VeriFayda 2.0**
+
+*This system is designed to integrate with Ethiopia's national digital identity infrastructure through VeriFayda 2.0, providing secure and efficient visitor management for government and private institutions.*
